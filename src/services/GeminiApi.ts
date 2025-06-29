@@ -6,7 +6,7 @@ console.log("API url:", import.meta.env.GEMINI_API_URL);
 
 
 
-export const GenerateContnet = async (message) => {
+export const GenerateContnet = async (message: string) => {
     if (!GEMINI_API_KEY) {
         throw new Error(" GEMINI_API_KEY is not Defined in ..")
     }

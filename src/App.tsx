@@ -6,7 +6,7 @@ import { useAppSelector } from './store/hooks';
 import './App.css'
 import { useState } from 'react';
 import ChatMessages from './components/ChatMessages/ChatMessages';
-import { formatTime, getRandomResponse } from './utils/chatUtils';
+import { formatTime } from './utils/chatUtils';
 import LoadingIndicator from './components/Loading/LoadingIndicator';
 import ChatInput from './components/CahtInput/CahtInput';
 import { GenerateContnet } from "./services/GeminiApi";
@@ -42,30 +42,57 @@ function App() {
   ]);
 
 
-  const HandleSendMessage = () => {
-    const userMessage = {
-      id: Date.now().toString(),
-      text: input,
-      sender: "user",
-      timestamp: new Date(),
-    }
+  // const HandleSendMessage = () => {
+  //   const userMessage = {
+  //     id: Date.now().toString(),
+  //     text: input,
+  //     sender: "user" as const,
+  //     timestamp: new Date(),
+  //   }
 
-    setMessage((prev) => [...prev, userMessage])
-    setInput("")
+  //   setMessage((prev) => [...prev, userMessage])
+  //   setInput("")
+  //   setLoading(true);
+
+
+  //   setTimeout( async () => {
+  //     const botMessage = {
+  //       id: (Date.now() + 1).toString(),
+  //       text: GenerateContnet(input),
+  //       sender: "bot",
+  //       timestamp: new Date(),
+  //     }
+  //     setMessage((prev) => [...prev, botMessage])
+  //     setLoading(false);
+  //   }, 1500)
+  // }
+
+  const HandleSendMessage = async () => {
+    const userMessage = {
+      id: Date.now(),
+      text: input,
+      sender: "user" as const,
+      timestamp: new Date(),
+    };
+
+    setMessage((prev) => [...prev, userMessage]);
+    setInput("");
     setLoading(true);
 
-
-    setTimeout(() => {
-      const botMessage = {
-        id: (Date.now() + 1).toString(),
-        text: GenerateContnet(input),
+    // simulate async
+    setTimeout(async () => {
+      const response = await GenerateContnet(input);
+      const botMessage: MessageType = {
+        id: Date.now() + 1,
+        text: response,
         sender: "bot",
         timestamp: new Date(),
-      }
-      setMessage((prev) => [...prev, botMessage])
+      };
+      setMessage((prev) => [...prev, botMessage]);
       setLoading(false);
-    }, 1500)
-  }
+    }, 1500);
+  };
+
 
   return (
     <>
